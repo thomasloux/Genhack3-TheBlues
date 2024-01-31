@@ -1,1 +1,1 @@
-2024-01-31 10:23:38,391:DEBUG: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() is False. If you are running on a CPU-only machine, please use torch.load with map_location=torch.device('cpu') to map your storages to the CPU.
+2024-01-31 10:25:28,501:DEBUG: Successful simulation
