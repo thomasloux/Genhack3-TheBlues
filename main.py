@@ -44,7 +44,7 @@ def simulate(noise):
 
     
 if __name__ == "__main__":
-    noise = np.load("data/noise.npy")
+    noise = np.load("parameters/noise.npy")
     simulate(noise)
     
     
