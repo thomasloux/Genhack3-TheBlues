@@ -1,5 +1,5 @@
 ##############################################
-# DO NOT MODIFY THIS FILE
+# DO NOT MODIFY THE SIMULATE FUNCTION
 ##############################################
 
 from model import generative_model
@@ -11,7 +11,7 @@ logging.basicConfig(filename="check.log", level=logging.DEBUG,
                     format="%(asctime)s:%(levelname)s: %(message)s", 
                     filemode='w')
 
-def simulate(noise):
+def simulate(noise, scenario):
     """
     Simulation of your Generative Model
 
@@ -19,6 +19,8 @@ def simulate(noise):
     ----------
     noise : ndarray
         input of the generative model
+    scenario:ndarray
+        conditional variable (one-hot encoder)
 
     Returns
     -------
@@ -44,7 +46,10 @@ def simulate(noise):
 
     
 if __name__ == "__main__":
+    SCENARIO_NUMBER = 1  # <- PICK A SCENARIO NUMBER BETWEEN 1 AND 9
     noise = np.load("data/noise.npy")
-    simulate(noise)
+    scenario = np.zeros((noise.shape[0], 9))  # create a vector of zeros with shape (n_samples, 9)
+    scenario[SCENARIO_NUMBER-1] = 1
+    simulate(noise, scenario)
     
     
