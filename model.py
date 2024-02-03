@@ -54,7 +54,7 @@ def generative_model(noise):
     # <!> be sure that they are stored in the parameters/ directory <!>
     generator = Generator(latent_dim, 4)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    generator.load_state_dict(torch.load('parameters/generator_model.pth'), map_location=device)
+    generator.load_state_dict(torch.load('parameters/generator_model.pth', map_location=device))
     generated_data = generator(torch.Tensor(latent_variable))
 
     meancorrection = torch.tensor([9.38902,5.36495,3.31693,6.16897])
