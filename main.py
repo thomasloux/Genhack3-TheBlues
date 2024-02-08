@@ -29,7 +29,7 @@ def simulate(noise, scenario):
     """
 
     try:
-        output = generative_model(noise)
+        output = generative_model(noise, scenario)
         message = "Successful simulation" 
         assert output.shape == (noise.shape[0], 4), "Shape error, it must be (noise.shape[0], 4). Please verify the shape of the output."
         
