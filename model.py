@@ -61,7 +61,7 @@ def generative_model(noise, scenario):
     # load your parameters or your model
     # <!> be sure that they are stored in the parameters/ directory <!>
     model = Generator(latent_dim, output_dim=4).to(device)
-    model.load_state_dict(torch.load(f'parameters/generator_model_{label}.pth'))
+    model.load_state_dict(torch.load(f'parameters/generator_model_{label}.pth'), map_location=device)
 
     return (model(latent_variable) * (maxs[label]) + mins[label]) # G(Z, x)
 
