@@ -13,6 +13,32 @@
 
 # <!> DO NOT ADD ANY OTHER ARGUMENTS <!>
 
+import numpy as np
+import torch
+import torch.nn as nn
+
+class Generator(nn.Module):
+    def __init__(self, latent_dim, output_dim):
+        super(Generator, self).__init__()
+        self.model = nn.Sequential(
+            nn.Linear(latent_dim, 128),
+            nn.LeakyReLU(0.01),
+            nn.BatchNorm1d(128, momentum=0.8),
+            nn.Linear(128, 256),
+            nn.LeakyReLU(0.01),
+            nn.BatchNorm1d(256, momentum=0.8),
+            nn.Linear(256, 512),
+            nn.LeakyReLU(0.01),
+            nn.BatchNorm1d(512, momentum=0.8),
+            nn.Linear(512, output_dim),
+            nn.LeakyReLU(0)
+        )
+
+    def forward(self, x):
+        return self.model(x)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 def generative_model(noise, scenario):
     """
     Generative model
@@ -26,14 +52,18 @@ def generative_model(noise, scenario):
     """
     # See below an example
     # ---------------------
-    latent_variable = noise[:, ...]  # choose the appropriate latent dimension of your model
-
+    label = np.argmax(scenario)
+    latent_dim = [40, 30, 30, 30, 30, 50, 30, 30, 30]
+    mins = torch.load('parameters/mins.pth')
+    maxs = torch.load('parameters/maxs.pth')
+    latent_variable = noise[:, :latent_dim[label]]  # choose the appropriate latent dimension of your model
+    
     # load your parameters or your model
     # <!> be sure that they are stored in the parameters/ directory <!>
-    model = ...
+    model = Generator(latent_dim, output_dim=4).to(device)
+    model.load_state_dict(torch.load(f'parameters/generator_model_{label}.pth'))
 
-    return model(latent_variable) # G(Z)
-    # return model(latent_variable, scenario) # G(Z, x)
+    return (model(latent_variable) * (maxs[label]) + mins[label]) # G(Z, x)
 
 
 
