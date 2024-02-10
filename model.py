@@ -37,7 +37,6 @@ class Generator(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def generative_model(noise, scenario):
     """
@@ -52,6 +51,7 @@ def generative_model(noise, scenario):
     """
     # See below an example
     # ---------------------
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     label = np.argmax(scenario)
     latent_dim = [40, 30, 30, 30, 30, 50, 30, 30, 30]
     mins = torch.load('parameters/mins.pth')
@@ -62,8 +62,9 @@ def generative_model(noise, scenario):
     # <!> be sure that they are stored in the parameters/ directory <!>
     model = Generator(latent_dim, output_dim=4).to(device)
     model.load_state_dict(torch.load(f'parameters/generator_model_{label}.pth'), map_location=device)
-
-    return (model(latent_variable) * (maxs[label]) + mins[label]) # G(Z, x)
+    generated_data = model(torch.Tensor(latent_variable))
+    generated_data = generated_data * (maxs[label]) + mins[label]
+    return generated_data.detach().numpy() # G(Z, x)
 
 
 
